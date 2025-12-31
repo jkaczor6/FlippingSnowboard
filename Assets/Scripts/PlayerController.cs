@@ -6,6 +6,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] float torqueAmount = 1f;
     [SerializeField] float baseSpeed = 20f;
     [SerializeField] float boostSpeed = 25f;
+    [SerializeField] ParticleSystem powerupParticles;
     InputAction moveAction;
     Rigidbody2D rb2d;
     SurfaceEffector2D se2d;
@@ -14,6 +15,7 @@ public class PlayerController : MonoBehaviour
     bool canControlPlayer = true;
     float previousRotation = 0f;
     float totalRotation = 0f;
+    int powerupCount = 0;
 
     void Start()
     {
@@ -76,5 +78,35 @@ public class PlayerController : MonoBehaviour
         }
 
         previousRotation = currentRotation;
+    }
+
+    public void ActivatePowerup(PowerUpSO powerUp)
+    {
+        powerupParticles.Play();
+        powerupCount++;
+        if(powerUp.getPowerupType() == "speed")
+        {
+            baseSpeed += powerUp.getValueChange();
+            boostSpeed += powerUp.getValueChange();
+        } else if(powerUp.getPowerupType() == "torque")
+        {
+            torqueAmount += powerUp.getValueChange();
+        }
+    }
+    public void DeactivatePowerup(PowerUpSO powerUp)
+    {
+        powerupCount--;
+        if(powerupCount == 0)
+        {
+            powerupParticles.Stop();
+        }
+        if(powerUp.getPowerupType() == "speed")
+        {
+            baseSpeed -= powerUp.getValueChange();
+            boostSpeed -= powerUp.getValueChange();
+        } else if(powerUp.getPowerupType() == "torque")
+        {
+            torqueAmount -= powerUp.getValueChange();
+        }
     }
 }
