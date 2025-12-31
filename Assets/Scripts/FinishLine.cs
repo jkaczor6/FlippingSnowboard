@@ -7,6 +7,12 @@ public class FinishLine : MonoBehaviour
 
     [SerializeField] float delayBeforeReload = 1.5f;
     [SerializeField] ParticleSystem finishParticles;
+    ScoreManager scoreManager;
+
+    void Start()
+    {
+        scoreManager = FindFirstObjectByType<ScoreManager>();
+    }
     void OnTriggerEnter2D(Collider2D collision)
     {
         int layerIndex = LayerMask.NameToLayer("Player");
